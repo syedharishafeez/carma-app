@@ -13,6 +13,7 @@ After cloning this app follow the steps mentioned in Backend and Frontend sectio
 
 ### How to start backend application
 - cd backend
+- create a database in mysql
 - Set environment variables according to .env.dev file
 - npm i
 - npm start
