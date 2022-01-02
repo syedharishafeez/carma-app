@@ -48,11 +48,11 @@ router.post("/", async (req, res) => {
         // check whether this users card is already exist or not
         let fetchUserCardQuery = "SELECT * FROM cards where user_id=1"
         let fetchUserCardDetails = await dbCon.query(fetchUserCardQuery)
-        if(fetchUserCardDetails && Array.isArray(fetchUserCardDetails) && Array.isArray(fetchUserCardDetails[0]) && fetchUserCardDetails[0].length){
+        if(fetchUserCardDetails && fetchUserCardDetails.rowCount){
             throw "Your card already exists, kindly delete it first"
         }
 
-        let addCardQuery = "INSERT INTO cards(card_number, cvv, card_holder_name, expiration_date, user_id) VALUES(?, ?, ?, ?, 1)"
+        let addCardQuery = "INSERT INTO cards(card_number, cvv, card_holder_name, expiration_date, user_id) VALUES($1, $2, $3, $4, 1)"
         try{
             await dbCon.query(addCardQuery, [encrypedCardNumber, encryptedCVV, cardHolderName, new Date(expirationDate)])
             res.status(200).json({message: "Card added successfully"})
@@ -72,7 +72,7 @@ router.delete("/", async (req, res) => {
     try{
         let fetchUserCardQuery = "SELECT * FROM cards where user_id=1"
         let fetchUserCardDetails = await dbCon.query(fetchUserCardQuery)
-        if(fetchUserCardDetails && Array.isArray(fetchUserCardDetails) && Array.isArray(fetchUserCardDetails[0]) && fetchUserCardDetails[0].length){
+        if(fetchUserCardDetails && fetchUserCardDetails.rowCount){
             const deleteCardQuery = "DELETE FROM cards where user_id=1"
             await dbCon.query(deleteCardQuery);
             res.status(200).json({message: "Card deleted successfully, you can add new one now"})

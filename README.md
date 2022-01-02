@@ -1,5 +1,5 @@
 # Application Details
-- In this repo we have a frontend which is build on react and a backend which is build on node and we use mysql as our DB and the node version that we use for both frontend and backend is v14.17.3.
+- In this repo we have a frontend which is build on react and a backend which is build on node and we use postgres as our DB and the node version that we use for both frontend and backend is v14.17.3.
 - A user can enter only one card
 - You can add card via API or from frontend (Enter all the details and then click on submit button)
 - So in order to add new one, you have to delete the previously added card.
@@ -13,7 +13,7 @@ After cloning this app follow the steps mentioned in Backend and Frontend sectio
 
 ### How to start backend application
 - cd backend
-- create a database in mysql
+- create a database in postgres
 - Set environment variables according to .env.dev file
 - npm i
 - npm start

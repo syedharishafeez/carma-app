@@ -1,18 +1,19 @@
 require("dotenv").config();
-let mysql = require('mysql2/promise');
+const { Client } = require('pg')
+const con = new Client({
+    host: process.env.DATABASE_HOST,
+    user: process.env.DATABASE_USER_NAME,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME,
+    port: process.env.DATABASE_PORT
+})
 
 async function databaseInitialization(){
     try{
-        const con = await mysql.createConnection({
-            host: process.env.DATABASE_HOST,
-            user: process.env.DATABASE_USER_NAME,
-            password: process.env.DATABASE_PASSWORD,
-            database: process.env.DATABASE_NAME,
-            port: process.env.DATABASE_PORT
-        });
+        await con.connect()
         console.log("Connected!");
         // create user table because card table has user id as a foreign key
-        const createUserTableQuery = "CREATE TABLE users(id int NOT NULL AUTO_INCREMENT, username VARCHAR(255), password VARCHAR(255), email VARCHAR(255), address VARCHAR(255), PRIMARY KEY (id))";
+        const createUserTableQuery = "CREATE TABLE users(id SERIAL, username VARCHAR(255), password VARCHAR(255), email VARCHAR(255), address VARCHAR(255), PRIMARY KEY (id))";
         try{
             await con.query(createUserTableQuery)
 
@@ -25,7 +26,7 @@ async function databaseInitialization(){
         }
 
         // create card table
-        const createCardTableQuery = "CREATE TABLE cards(id int NOT NULL AUTO_INCREMENT, card_number VARCHAR(255), cvv VARCHAR(255), card_holder_name VARCHAR(255), expiration_date DATE, user_id INT, PRIMARY KEY (id), FOREIGN KEY (user_id) REFERENCES users(id))";
+        const createCardTableQuery = "CREATE TABLE cards(id SERIAL, card_number VARCHAR(255), cvv VARCHAR(255), card_holder_name VARCHAR(255), expiration_date DATE, user_id INT, PRIMARY KEY (id), FOREIGN KEY (user_id) REFERENCES users(id))";
         try{
             await con.query(createCardTableQuery)    
         }
@@ -39,4 +40,4 @@ async function databaseInitialization(){
     }
 }
 
-module.exports = {databaseInitialization}
+module.exports = {con, databaseInitialization}
