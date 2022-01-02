@@ -4,7 +4,6 @@ const router = express.Router();
 
 // create a post route to add a card
 router.post("/", async (req, res) => {
-    console.log("here it is", req.body)
     const {dbCon} = req
     const { cardNumber, cvv, cardHolderName, expirationDate} = req.body
     try{
@@ -48,13 +47,13 @@ router.post("/", async (req, res) => {
         // check whether this users card is already exist or not
         let fetchUserCardQuery = "SELECT * FROM cards where user_id=1"
         let fetchUserCardDetails = await dbCon.query(fetchUserCardQuery)
-        if(fetchUserCardDetails){
-            throw "Your card is already exist"
+        if(fetchUserCardDetails && Array.isArray(fetchUserCardDetails) && Array.isArray(fetchUserCardDetails[0]) && fetchUserCardDetails[0].length){
+            throw "Your card already exists, kindly delete it first"
         }
 
         let addCardQuery = "INSERT INTO cards(card_number, cvv, card_holder_name, expiration_date, user_id) VALUES(?, ?, ?, ?, 1)"
         try{
-            let addCrad = await dbCon.query(addCardQuery, [encrypedCardNumber, encryptedCVV, cardHolderName, new Date(expirationDate)])
+            await dbCon.query(addCardQuery, [encrypedCardNumber, encryptedCVV, cardHolderName, new Date(expirationDate)])
             res.status(200).json({message: "Card added successfully"})
         }
         catch(ex){
@@ -64,6 +63,19 @@ router.post("/", async (req, res) => {
     catch(ex){
         console.log("ex === ", ex)
         res.status(400).json({message: ex})
+    }
+})
+
+router.delete("/", async (req, res) => {
+    const {dbCon} = req
+    try{
+        const deleteCardQuery = "DELETE FROM cards where user_id=1"
+        await dbCon.query(deleteCardQuery);
+        res.status(200).json({message: "Card deleted successfully, you can add new one now"})
+    }
+    catch(ex){
+        console.log("ex === ", ex)
+        res.status(400).json({message: "Your card does not exist"})
     }
 })
 

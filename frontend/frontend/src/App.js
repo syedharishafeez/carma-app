@@ -5,29 +5,57 @@ import {Button, TextField} from '@mui/material/';
 
 function App() {
   const [value, setValue] = React.useState(new Date());
-  const [accountNumber, setAccountNumber] = useState("")
+  const [cardNumber, setCardNumber] = useState("")
   const [cvv, setCvv] = useState("")
   const [cardHolderName, setCardHolderName] = useState("")
   const [expirationDate, setExpirationDate] = useState("")
   
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     console.log({
-      accountNumber, cvv, cardHolderName, expirationDate
+      cardNumber, cvv, cardHolderName, expirationDate
     })
-    let url = "http://localhost:3000/card"
-    fetch(url, {
-      method: 'POST', // *GET, POST, PUT, DELETE, etc.
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({accountNumber, cvv, cardHolderName, expirationDate})
+    let url = "http://localhost:5000/card"
+    try{
+      let addCardRequest = await fetch(url, {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({cardNumber, cvv, cardHolderName, expirationDate})
+      })
+      let addCardResponse = await addCardRequest.json()
+      alert(addCardResponse.message)
+    }catch(ex){
+      console.log("ex === ", ex)
+      alert("Please Contact Administrator")
+    }
+  }
+
+  const handleDelete = async () => {
+    console.log({
+      cardNumber, cvv, cardHolderName, expirationDate
     })
+    let url = "http://localhost:5000/card"
+    try{
+      let addCardRequest = await fetch(url, {
+        method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        // body: JSON.stringify({cardNumber, cvv, cardHolderName, expirationDate})
+      })
+      let addCardResponse = await addCardRequest.json()
+      alert(addCardResponse.message)
+    }catch(ex){
+      console.log("ex === ", ex)
+      alert("Please Contact Administrator")
+    }
   }
 
   return (
     <div className="App">
-       <TextField id="outlined-basic" label="Account Number" variant="outlined" onChange = {(e) => setAccountNumber(e.target.value)}/>
+       <TextField id="outlined-basic" label="Card Number" variant="outlined" onChange = {(e) => setCardNumber(e.target.value)}/>
       <TextField id="outlined-basic" label="CVV" variant="outlined" onChange = {(e) => setCvv(e.target.value)}/>
       <TextField id="outlined-basic" label="Card Holder Name" variant="outlined" onChange = {(e) => setCardHolderName(e.target.value)}/>
       <TextField
@@ -41,7 +69,8 @@ function App() {
           shrink: true,
         }}
       />
-      <Button variant="contained" onClick={handleSubmit}>Contained</Button>
+      <Button variant="contained" onClick={handleSubmit}>Submit details</Button>
+      <Button color="error" variant="contained" onClick={handleDelete}>Delete Card</Button>
     </div>
   );
 }
