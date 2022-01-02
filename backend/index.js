@@ -9,12 +9,14 @@ app.use(cors());
 app.use(bodyParser.json());
 
 let dbCon = con.databaseInitialization()
-console.log("Hi")
+app.get("/", (req, res) => {
+  res.status(200).json({message: "Backend is running"})
+})
 app.use('/card', async (req, res, next) => {
     if(!dbCon || !dbCon.query){
       dbCon = await con.databaseInitialization()
     }
-    req.dbCon = dbCon; // adding database connection instance in a request, s that we can use it in route
+    req.dbCon = dbCon; // adding database connection instance in a request, so that we can use it in route
     next();
 }, routes);
 
