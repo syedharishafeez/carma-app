@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import './App.css';
 import {Button, TextField} from '@mui/material/';
-
+import { url } from './constants';
 
 function App() {
   const [value, setValue] = React.useState(new Date());
@@ -15,7 +15,6 @@ function App() {
     console.log({
       cardNumber, cvv, cardHolderName, expirationDate
     })
-    let url = "http://localhost:5000/card"
     try{
       let addCardRequest = await fetch(url, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -36,7 +35,7 @@ function App() {
     console.log({
       cardNumber, cvv, cardHolderName, expirationDate
     })
-    let url = "http://localhost:5000/card"
+    
     try{
       let addCardRequest = await fetch(url, {
         method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
