@@ -20,8 +20,8 @@ After cloning this app follow the steps mentioned in Backend and Frontend sectio
 
 Once backend application has started, you can test it by hitting the url **http://BACKEND_IP:BACKEND_PORT**
 
-### Enhancements
-- We can use ORM rather than the native queries because ORM comes up with different advantages.
+### TODO
+- We will use ORM rather than the native queries because ORM comes up with different advantages.
 
 ## Frontend
 - cd frontend
