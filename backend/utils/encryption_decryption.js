@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 
 const encrypt = (valueToBeEncrypt) => {
-    const algorithm = "aes-192-cbc";
+    const algorithm = "aes-256-cbc";
     const key = crypto.scryptSync("decrypt-trial", "salt", 24);
     const iv = Buffer.alloc(16, 0);
 
@@ -13,7 +13,7 @@ const encrypt = (valueToBeEncrypt) => {
 }
 
 const decrypt = (valueToDecrypt) => {
-    const algorithm = "aes-192-cbc";
+    const algorithm = "aes-256-cbc";
     const key = crypto.scryptSync("decrypt-trial", "salt", 24);
     const iv = Buffer.alloc(16, 0);
     const passwordForDecrypt = valueToDecrypt;
