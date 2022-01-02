@@ -70,13 +70,21 @@ router.post("/", async (req, res) => {
 router.delete("/", async (req, res) => {
     const {dbCon} = req
     try{
-        const deleteCardQuery = "DELETE FROM cards where user_id=1"
-        await dbCon.query(deleteCardQuery);
-        res.status(200).json({message: "Card deleted successfully, you can add new one now"})
+        let fetchUserCardQuery = "SELECT * FROM cards where user_id=1"
+        let fetchUserCardDetails = await dbCon.query(fetchUserCardQuery)
+        if(fetchUserCardDetails && Array.isArray(fetchUserCardDetails) && Array.isArray(fetchUserCardDetails[0]) && fetchUserCardDetails[0].length){
+            const deleteCardQuery = "DELETE FROM cards where user_id=1"
+            await dbCon.query(deleteCardQuery);
+            res.status(200).json({message: "Card deleted successfully, you can add new one now"})
+        }
+        else{
+            throw "Your card does not exist"
+        }
+        
     }
     catch(ex){
         console.log("ex === ", ex)
-        res.status(400).json({message: "Your card does not exist"})
+        res.status(400).json({message: ex})
     }
 })
 
