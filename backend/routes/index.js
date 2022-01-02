@@ -1,4 +1,5 @@
 const express = require('express');
+const luhn = require("luhn-alg")
 const { encrypt } = require('../utils/encryption_decryption');
 const router = express.Router();
 
@@ -9,7 +10,7 @@ router.post("/", async (req, res) => {
     try{
         let encrypedCardNumber = ""
         if(cardNumber){
-            if(cardNumber.length === 16){
+            if(cardNumber.length === 16 && luhn(cardNumber)){
                 encrypedCardNumber = encrypt(cardNumber)
             }else{
                 throw "Invalid Card Number"
